@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N=1e6+5;
+int n,now,ans;
+int f[N];
+struct number{int pos,w;}num[N];
+
+inline bool cmp(number a,number b)
+{
+	return a.pos<b.pos;
+}
+
+priority_queue<int>q;
+int main(){
+	scanf("%d",&n);
+	for (register int i=1; i<=n; ++i) scanf("%d%d",&num[i].pos,&num[i].w);
+	sort(num+1,num+n+1,cmp);
+	now=n;
+	for (register int i=700000; i>=1; --i)
+	{
+		while (now && num[now].pos>=i) q.push(num[now].w),now--;
+		if (!q.size()) continue;
+		ans+=q.top(); q.pop();
+	}
+	printf("%d\n",ans);
+return 0;
+}
