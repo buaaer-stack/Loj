@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define maxn 100
+char a[maxn + 5];
+int f[maxn + 5][maxn + 5];
+int n;
+int main() {
+    scanf("%s", &a);
+    n = strlen(a);
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i + 1; j < n; j++) {
+            if ((a[i] == '(' && a[j] == ')') || (a[i] == '[' && a[j] == ']')) {
+                f[i][j] = 2 + f[i + 1][j - 1];
+            }
+            for (int k = i; k < j; k++) {
+                f[i][j] = max(f[i][j], f[i][k] + f[k + 1][j]);
+            }
+        }
+    }
+    cout << n - f[0][n - 1];
+    return 0;
+}
