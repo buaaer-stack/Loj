@@ -1,0 +1,62 @@
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <math.h>
+// #include <iostream>
+// #include <string>
+// #include <algorithm>
+// #include <queue>
+// using namespace std;
+#define mem(a,num) memset(a,num,sizeof(a))
+#define FOR(i,j,n) for(int i=j;i<=n;i++)
+#define POR(i,n,j) for(int i=n;i>=j;i--)
+#define max(a,b) (a)>(b)?(a):(b)
+#define min(a,b) (a)<(b)?(a):(b)
+#define ll long long
+#define maxn 1000100
+int read(){
+   int s=0,w=1;                                              
+   char ch=getchar();
+   while(ch<'0'||ch>'9'){if(ch=='-')w=-1;ch=getchar();}
+   while(ch>='0'&&ch<='9') s=s*10+ch-'0',ch=getchar();
+   return s*w;
+}
+
+
+//从数学方面来看，事实上我们只需要计算侧面积以及最下面的圆面积。
+
+int n,m;
+int minn=1e9;
+
+void dfs(int num,int s,int v,int lastr,int lasth){
+    if(num==m+1&&v==n){
+        minn=min(minn,s);
+        return;
+    }
+    if(v>=n)return;
+    int t=m-num+1;
+    if(v+t*lastr*lastr*lasth<n)return;
+    if(num==1){
+        for(int i=lastr;i>=m;i--){
+            for(int j=m;j<=lasth;j++){
+                dfs(num+1,s+i*i+2*i*j,v+i*i*j,i,j);
+            }
+        }
+    }
+    else{
+        for(int i=lastr-1;i>=m-num+1;i--){
+            for(int j=m-num+1;j<=lasth-1;j++){
+                dfs(num+1,s+2*i*j,v+i*i*j,i,j);
+            }
+        }
+    }
+}
+int main(){
+    n=read();
+    m=read();
+    dfs(1,0,0,28,28);
+    printf("%d\n",minn);
+    return 0;
+}
