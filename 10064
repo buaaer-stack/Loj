@@ -1,0 +1,70 @@
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+#include<queue>
+#include<cstring>
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+
+
+#define mod 2147483647
+int n,m,tot=1;
+#define MAXN 10001
+#define MAXM 1000010
+int head[MAXN],ver[MAXM],edge[MAXM],Next[MAXM],d[MAXN];
+int v[MAXN];
+ll ans=1,out1[MAXN];
+priority_queue<pair<int,int> >q;
+
+void add_edge(int x,int y,int z){
+    ver[tot]=y,edge[tot]=z;
+    Next[tot]=head[x];
+    head[x]=tot++;
+}
+
+void dijkstra(){
+    memset(d,0x3f,sizeof(d));
+    memset(v,0,sizeof(v));
+    d[1]=0;
+    q.push(make_pair(0,1));
+    while(q.size()){
+        int x=q.top().second;q.pop();
+        if(v[x])continue;
+        v[x]=1;
+        for(int i=head[x];i;i=Next[i]){
+            int y=ver[i],z=edge[i];
+            if(d[y]>d[x]+z){
+                d[y]=d[x]+z;
+                q.push(make_pair(-d[y],y));
+            }
+        }
+    }
+}
+
+void solve(){
+    int u,v,w;
+    for(int i=1;i<tot;i+=2){
+        u=ver[i+1];v=ver[i];
+        w=edge[i];
+        if(d[u]+w==d[v])out1[v]++;
+        if(d[v]+w==d[u])out1[u]++;
+    }
+    ans=1;
+    for(int i=2;i<=n;i++)ans=ans*out1[i]%mod;
+    printf("%lld\n",ans);
+}
+
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        int x,y,z;
+        cin>>x>>y>>z;
+        add_edge(x,y,z);
+        add_edge(y,x,z);
+    }
+    dijkstra();
+    solve();
+    return 0;
+}
