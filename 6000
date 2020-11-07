@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <algorithm>
+#include <math.h>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <queue>
+using namespace std;
+#define mem(a,num) memset(a,num,sizeof(a))
+#define FOR(i,j,n) for(int i=j;i<=n;i++)
+#define POR(i,n,j) for(int i=n;i>=j;i--)
+#define max(a,b) (a)>(b)?(a):(b)
+#define min(a,b) (a)<(b)?(a):(b)
+#define ll long long
+#define maxn 105
+#define INF 0xfffffff
+int read(){
+   int s=0,w=1;                                              
+   char ch=getchar();
+   while(ch<'0'||ch>'9'){if(ch=='-')w=-1;ch=getchar();}
+   while(ch>='0'&&ch<='9') s=s*10+ch-'0',ch=getchar();
+   return s*w;
+}
+
+//匈牙利算法是由匈牙利数学家Edmonds于1965年提出，因而得名。
+//匈牙利算法是基于Hall定理中充分性证明的思想，它是部图匹配最常见的算法，
+//该算法的核心就是寻找增广路径，它是一种用增广路径求二分图最大匹配的算法。
+//基本原则就是在原有匹配（最开始的按优先顺序匹配）基础上重新分配，看是否可以添加一个新的匹配。
+
+// 选择边数最大的子图称为图的最大匹配问题(maximal matching problem) 
+// 如果一个匹配中，图中的每个顶点都和图中某条边相关联，则称此匹配为完全匹配，也称作完备匹配。
+
+
+
+//裸匈牙利算法
+
+const int N=105;
+
+int n,m;
+int a,b;
+int ans;
+bool vis[N];
+int fr[N];
+int ga[N][N];
+
+bool find(int x){
+    int i;
+    FOR(i,m+1,n){
+        if(ga[x][i]&&!vis[i]){
+            vis[i]=1;
+            if(!fr[i]||find(fr[i])){fr[i]=x;return 1;}
+        }
+    }
+    return 0;
+}
+
+int main(){
+    int i;
+    n=read();
+    m=read();
+    while(cin>>a>>b){
+        ga[a][b]=1;
+    }
+    FOR(i,1,m){
+        memset(vis,0,sizeof(vis));
+        if(find(i))ans++;
+    }
+    cout<<ans<<endl;
+}
+
+
+
+
+
