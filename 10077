@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXN=100005,MAXM=200005,mod=100003;
+struct node{
+    int u,v,w,next;
+};
+
+node a[4000010];
+
+int n,m,cnt;
+
+int head[4000010],dis[4000010],num[1000010];
+bool vis[1000010];
+
+
+inline void add(int u,int v,int w){
+    cnt++;
+    a[cnt].u=u;
+    a[cnt].v=v;
+    a[cnt].w=1;
+    a[cnt].next=head[u];
+    head[u]=cnt;
+}
+
+
+priority_queue<pair<int,int> >q;
+
+inline void dijkstra(){
+    dis[1]=0,num[1]=1;
+    q.push(make_pair(0,1));
+    while(!q.empty()){
+        int x=q.top().second;
+        q.pop();
+        if(vis[x])continue;
+        for(int i=head[x];i;i=a[i].next){
+            int y=a[i].v;
+            if(dis[y]==dis[x]+a[i].w){
+                num[y]=(num[y]+num[x])%mod;
+            }
+            else if(dis[y]>dis[x]+a[i].w){
+                num[y]=num[x];
+                dis[y]=dis[x]+a[i].w;
+                q.push(make_pair(-dis[y],y));
+            }
+        }
+    }
+}
+
+int main(){
+    cin>>n>>m;
+    memset(dis,0x3f,sizeof(dis));
+    memset(num,0,sizeof(num));
+    memset(vis,0,sizeof(vis));
+    for(int i=1;i<=m;i++){
+        int x,y;
+        cin>>x>>y;
+        add(x,y,1);
+        add(y,x,1);
+    }
+    dijkstra();
+    for(int i=1;i<=n;i++)printf("%d\n",num[i]);
+    return 0;
+}
